@@ -10,12 +10,8 @@ if (isset($_POST['userid']) && isset($_POST['password'])) {
     $result = $db->query($sql);
 
     if ($result->fetchArray()['count(*)'] > 0) {
-        setcookie('userid', $userid);
-        $ssid = $_COOKIE['PHPSESSID'];
-        $sql = "UPDATE users SET ssid='$ssid' WHERE userid='$userid'";
-        echo $sql;
-        $db->exec($sql);
-        #header("Location:mypage.php");
+        $_SESSION['userid'] = $userid;
+        header("Location:mypage.php");
     } else {
         echo 'user ID or password is incorrect.';
     }

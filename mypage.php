@@ -1,25 +1,19 @@
 <?php
+if (isset($_POST['logout'])) {
+    $_SESSION = array();
+    setcookie('PHPSESSID', '', time()-1800, '/');
+    session_destroy();
+    header("Location:login.php");
+}
+
 header('Content-Type: text/html; charset=UTF-8');
+session_start();
 
-$can = false;
-if (isset($_COOKIE['PHPSESSID'])) {
-    $ssid = $_COOKIE['PHPSESSID'];
-    $db = new SQLite3("db/db.sqlite");
-    $sql = "SELECT userid FROM users WHERE ssid='$ssid'";
-    $result = $db->query($sql);
-
-    echo $ssid;
-    if ($result->fetchArray()['userid'] != '') {
-        $can = true;
-        $userid = $result->fetchArray()['userid'];
-    }
+if (!isset($_SESSION['userid'])) {
+    header("Location:login.php");
 }
 
-if (!$can) {
-    #header("Location:login.php");
-}
-
-$userid = $_COOKIE['userid'];
+$userid = $_SESSION['userid'];
 ?>
 <html>
 <body>
